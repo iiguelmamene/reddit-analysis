@@ -35,7 +35,7 @@ def replace_with_lowercase(text):
 
     return text.lower()
 
-# remove all valid url's in the text
+# remove all valid urls in the text
 
 def remove_url(text):
 
