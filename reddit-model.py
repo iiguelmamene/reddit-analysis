@@ -16,11 +16,7 @@ from pyspark.ml.evaluation import BinaryClassificationEvaluator
 import os
 
 def main(context):
-  
-    # SAVED PARQUETS
-    # comments is the comments-minimal.json
-    # submissions is the submissions.json
-    
+
     # Read from JSON
     comments = sqlContext.read.json("comments-minimal.json.bz2")
     comments.registerTempTable("commentsTable")
@@ -41,29 +37,29 @@ def main(context):
     labels = sqlContext.read.format('csv').options(header='true', inferSchema='true').load("labeled_data.csv")
     labels.registerTempTable("labelsTable")
 
-    dfTask2 = sqlContext.sql("SELECT commentsTable.* FROM commentsTable INNER JOIN labelsTable ON commentsTable.id = labelsTable.Input_id")
+    df = sqlContext.sql("SELECT commentsTable.* FROM commentsTable INNER JOIN labelsTable ON commentsTable.id = labelsTable.Input_id")
 
     # unigrams, bigrams, trigrams
     def unigrams_bigrams_trigrams(text):
-        return parse-text.sanitize(text)
+        return parsetext.sanitize(text)
 
-    udf_func = udf(unigrams_bigrams_trigrams, ArrayType(StringType()))
-    dfTask4 = dfTask2.withColumn("udf_results", udf_func(col("body")))
+    udf_function = udf(unigrams_bigrams_trigrams, ArrayType(StringType()))
+    df_2 = df.withColumn("udf_results", udf_function(col("body")))
 
     # countVectorizer
     if(not os.path.exists("cvModel")):
         cv = CountVectorizer(inputCol="udf_results", outputCol="features", binary=True, minDF=5.0)
-        model = cv.fit(dfTask4)
+        model = cv.fit(df_2)
         model.write().overwrite().save("cvModel")
 
     model = CountVectorizerModel.load("cvModel")
-    dfTask6A = model.transform(dfTask4)
-    dfTask6A.registerTempTable("dfTask6ATable")
-    dfTask6B = sqlContext.sql("SELECT dfTask6ATable.*, IF(labelsTable.labeldjt=1, 1, 0) AS pos_label, if(labelsTable.labeldjt=-1, 1, 0) AS neg_label FROM dfTask6ATable INNER JOIN labelsTable ON dfTask6ATable.id = labelsTable.Input_id")
-    dfTask6B.registerTempTable("dfTask6BTable")
+    df_3A = model.transform(df_2)
+    df_3A.registerTempTable("df_3ATable")
+    df_3B = sqlContext.sql("SELECT df_3ATable.*, IF(labelsTable.labeldjt=1, 1, 0) AS pos_label, if(labelsTable.labeldjt=-1, 1, 0) AS neg_label FROM df_3ATable INNER JOIN labelsTable ON df_3ATable.id = labelsTable.Input_id")
+    df_3B.registerTempTable("df_3BTable")
 
-    pos = sqlContext.sql('select pos_label as label, features from dfTask6BTable')
-    neg = sqlContext.sql('select neg_label as label, features from dfTask6BTable')
+    pos = sqlContext.sql('select pos_label as label, features from df_3BTable')
+    neg = sqlContext.sql('select neg_label as label, features from df_3BTable')
 
     if(not os.path.exists("www/neg.model") or not os.path.exists("www/pos.model")):
         # Initialize two logistic regression models.
@@ -105,26 +101,26 @@ def main(context):
     negModel = CrossValidatorModel.load("www/neg.model")
 
     
-    dfTask8 = sqlContext.sql('SELECT commentsTable.id, commentsTable.body, commentsTable.created_utc, commentsTable.author_flair_text, submissionsTable.title, submissionsTable.pinned, commentsTable.score AS comment_score, submissionsTable.score AS story_score FROM commentsTable INNER JOIN submissionsTable ON RIGHT(commentsTable.link_id, 6)=submissionsTable.id')
-    dfTask8 = dfTask8.sample(False, 0.05, None)
+    df_4 = sqlContext.sql('SELECT commentsTable.id, commentsTable.body, commentsTable.created_utc, commentsTable.author_flair_text, submissionsTable.title, submissionsTable.pinned, commentsTable.score AS comment_score, submissionsTable.score AS story_score FROM commentsTable INNER JOIN submissionsTable ON RIGHT(commentsTable.link_id, 6)=submissionsTable.id')
+    df_4 = df_4.sample(False, 0.05, None)
 
     # unigrams, bigrams, trigrams
     def unigrams_bigrams_trigrams(text):
-        return parse-text.sanitize(text)
+        return parsetext.sanitize(text)
 
-    udf_func = udf(unigrams_bigrams_trigrams, ArrayType(StringType()))
-    dfTask9_1 = dfTask8.withColumn("udf_results", udf_func(col("body")))
+    udf_function = udf(unigrams_bigrams_trigrams, ArrayType(StringType()))
+    df_5_1 = df_4.withColumn("udf_results", udf_function(col("body")))
 
     # countVectorizer
     model = CountVectorizerModel.load("cvModel")
-    dfTask9_2 = model.transform(dfTask9_1)
-    dfTask9_2.registerTempTable("dfTask9_2Table")
+    df_5_2 = model.transform(df_5_1)
+    df_5_2.registerTempTable("df_5_2Table")
 
     
-    dfTask9_3 = sqlContext.sql("SELECT * FROM dfTask9_2Table WHERE dfTask9_2Table.body NOT LIKE '%/s%' AND dfTask9_2Table.body NOT LIKE '&gt%'")
-    dfTask9_3.registerTempTable("dfTask9_3Table")
+    df_5_3 = sqlContext.sql("SELECT * FROM df_5_2Table WHERE df_5_2Table.body NOT LIKE '%/s%' AND df_5_2Table.body NOT LIKE '&gt%'")
+    df_5_3.registerTempTable("df_5_3Table")
 
-    posResult_1 = posModel.transform(dfTask9_3)
+    posResult_1 = posModel.transform(df_5_3)
     posResult_1.registerTempTable("posResult_1Table")
     posResult_2 = sqlContext.sql("SELECT posResult_1Table.id, posResult_1Table.body, posResult_1Table.author_flair_text, posResult_1Table.created_utc, posResult_1Table.title, posResult_1Table.comment_score, posResult_1Table.story_score, posResult_1Table.features, posResult_1Table.pinned, posResult_1Table.prediction AS pos FROM posResult_1Table")
     finalResult_1 = negModel.transform(posResult_2)
@@ -159,15 +155,11 @@ def main(context):
         question4_story = sqlContext.sql("SELECT finalTable.story_score AS story_score, 100*SUM(finalTable.pos)/COUNT(*) AS percent_pos, 100*SUM(finalTable.neg)/COUNT(*) AS percent_neg FROM finalTable GROUP BY story_score ORDER BY story_score")
         question4_story.repartition(1).write.format("com.databricks.spark.csv").option("header", "true").save("story.csv")
 
-    if (not os.path.exists("pinned.csv")):
-        EC_Pinned = sqlContext.sql("SELECT finalTable.pinned AS is_pinned, 100*SUM(finalTable.pos)/COUNT(*) AS percent_pos, 100*SUM(finalTable.neg)/COUNT(*) AS percent_neg FROM finalTable GROUP BY pinned ORDER BY pinned")
-        EC_Pinned.repartition(1).write.format("com.databricks.spark.csv").option("header", "true").save("pinned.csv")
-
 if __name__ == "__main__":
     conf = SparkConf().setAppName("reddit-analysis")
     conf = conf.setMaster("local[*]")
     sc   = SparkContext(conf=conf)
     sqlContext = SQLContext(sc)
-    sc.addPyFile("parse-text.py")
-    import parse-text
+    sc.addPyFile("parsetext.py")
+    import parsetext
     main(sqlContext)
