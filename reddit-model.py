@@ -111,7 +111,7 @@ def main(context):
 
     # unigrams, bigrams, trigrams
     def unigrams_bigrams_trigrams(text):
-        return cleantext.sanitize(text)
+        return parse-text.sanitize(text)
 
     udf_func = udf(unigrams_bigrams_trigrams, ArrayType(StringType()))
     dfTask9_1 = dfTask8.withColumn("udf_results", udf_func(col("body")))
