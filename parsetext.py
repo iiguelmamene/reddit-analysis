@@ -41,10 +41,8 @@ def remove_url(text):
 
     # first replace the [websiteName](urlName) with websiteName
     returnStr = re.sub(r'\[(.*)\]\((?:(?:https?|file|ftp)://)?\S+(?:\.com|\.edu|\.gov|\.org|\.net|\.us)\\*\S*\)', r'\1', text)
-    # then go back and remove all remaining url's not in [websiteName](urlName) format
+    # then go back and remove all remaining urls not in [websiteName](urlName) format
     returnStr = re.sub(r'(?:(?:https?|file|ftp)://)?\S+(?:\.com|\.edu|\.gov|\.org|\.net|\.us)\\*\S*', "", returnStr)
-    # more complicated regex that I want to save but idk if it works as well as the other one
-    # (?:(?:https?|file|ftp)://)?[a-zA-Z.@:/_\(\)?=&#-0123456789]+(?:.com|.edu|.gov|.org|.net|.us)[a-zA-Z.@:/_\(\)?=&#-0123456789]*
     return returnStr
 
 # split the strings on all the spaces
