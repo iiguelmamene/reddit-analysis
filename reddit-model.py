@@ -41,7 +41,6 @@ def main(context):
     labels = sqlContext.read.format('csv').options(header='true', inferSchema='true').load("labeled_data.csv")
     labels.registerTempTable("labelsTable")
 
-    #TASK 2
     dfTask2 = sqlContext.sql("SELECT commentsTable.* FROM commentsTable INNER JOIN labelsTable ON commentsTable.id = labelsTable.Input_id")
 
     # unigrams, bigrams, trigrams
