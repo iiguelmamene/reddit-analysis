@@ -281,7 +281,7 @@ def sanitize(text):
 if __name__ == "__main__":
     # This is the Python main function.
     # You should be able to run
-    # python cleantext.py <filename>
+    # python parse-text.py <filename>
     # and this "main" function will open the file,
     # read it line by line, extract the proper value from the JSON,
     # pass to "sanitize" and print the result as a list.
