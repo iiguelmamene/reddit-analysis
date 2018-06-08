@@ -46,7 +46,7 @@ def main(context):
 
     # unigrams, bigrams, trigrams
     def unigrams_bigrams_trigrams(text):
-        return cleantext.sanitize(text)
+        return parse-text.sanitize(text)
 
     udf_func = udf(unigrams_bigrams_trigrams, ArrayType(StringType()))
     dfTask4 = dfTask2.withColumn("udf_results", udf_func(col("body")))
@@ -169,6 +169,6 @@ if __name__ == "__main__":
     conf = conf.setMaster("local[*]")
     sc   = SparkContext(conf=conf)
     sqlContext = SQLContext(sc)
-    sc.addPyFile("cleantext.py")
-    import cleantext
+    sc.addPyFile("parse-text.py")
+    import parse-text
     main(sqlContext)
