@@ -1,4 +1,3 @@
-
 from __future__ import print_function
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SQLContext
@@ -41,7 +40,7 @@ def main(context):
 
     # unigrams, bigrams, trigrams
     def unigrams_bigrams_trigrams(text):
-        return parsetext.sanitize(text)
+        return parsetext.clean_up(text)
 
     udf_function = udf(unigrams_bigrams_trigrams, ArrayType(StringType()))
     df_2 = df.withColumn("udf_results", udf_function(col("body")))
@@ -106,7 +105,7 @@ def main(context):
 
     # unigrams, bigrams, trigrams
     def unigrams_bigrams_trigrams(text):
-        return parsetext.sanitize(text)
+        return parsetext.clean_up(text)
 
     udf_function = udf(unigrams_bigrams_trigrams, ArrayType(StringType()))
     df_5_1 = df_4.withColumn("udf_results", udf_function(col("body")))
