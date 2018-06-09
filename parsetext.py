@@ -43,51 +43,46 @@ def remove_url(text):
 
 # split the strings on all the spaces
 def split_on_space(text):
-
-    # use regex to remove the multiple spaces
+    # use regular expressions to remove multiple spaces
     noSpaceStr = re.sub(" +", " ", text)
-    # trim excess whitespace at beginning and end
+    # remove excess whitespace
     noSpaceStr = noSpaceStr.strip()
-    # use the python split function to tokenize the string
+    # split
     returnStr = noSpaceStr.split(" ")
     return returnStr
 
 # return the all the parsed words in a string
 def create_parsed_text(list):
-
-    # concatenate all the strings
+    # concatenate the strings
     returnStr = ""
     totalLength = len(list)
     for counter, token in enumerate(list):
         returnStr = returnStr + token
         # if not last token, add a space
-        if counter < (totalLength-1):
+        if counter < (totalLength - 1):
             returnStr = returnStr + " "
     return returnStr
 
-# create the unigrams in a string
+# create the unigrams
 def create_unigrams(list):
-
-    # concatenate all the strings
+    # concatenate the strings
     returnStr = ""
     totalLength = len(list)
     for counter, token in enumerate(list):
         if token not in _EXTERNAL_PUNCTUATION:
-            # if not empty string, add a space
             if returnStr != "":
                 returnStr = returnStr + " "
             returnStr = returnStr + token
     return returnStr
 
-# create the unigrams in a string
+# create the bigrams
 def create_bigrams(list):
-
-    # concatenate all the strings
+    # concatenate the strings
     returnStr = ""
     totalLength = len(list)
     for i in range(len(list)):
         # only go through the second to last word
-        if i < (totalLength-1):
+        if i < (totalLength - 1):
             if list[i] not in _EXTERNAL_PUNCTUATION and list[i+1] not in _EXTERNAL_PUNCTUATION:
                 # only add space if not first bigram in string
                 if returnStr != "":
@@ -95,15 +90,14 @@ def create_bigrams(list):
                 returnStr = returnStr + list[i] + "_" + list[i+1]
     return returnStr
 
-# create the trigrams in a string
+# create the trigrams
 def create_trigrams(list):
-
     # concatenate all the strings
     returnStr = ""
     totalLength = len(list)
     for i in range(len(list)):
         # only go through the third to last word
-        if i < (totalLength-2):
+        if i < (totalLength - 2):
             if list[i] not in _EXTERNAL_PUNCTUATION and list[i+1] not in _EXTERNAL_PUNCTUATION and list[i+2] not in _EXTERNAL_PUNCTUATION:
                 # only add space if not first trigram in string
                 if returnStr != "":
