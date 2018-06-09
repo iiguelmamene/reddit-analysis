@@ -162,13 +162,6 @@ def test_external(text):
     return newStr
 
 def sanitize(text):
-    """Do parse the text in variable "text" according to the spec, and return
-    a LIST containing FOUR strings
-    1. The parsed text.
-    2. The unigrams
-    3. The bigrams
-    4. The trigrams
-    """
 
     returnStr = replace_with_space(text)
     returnStr = remove_url(returnStr)
@@ -187,19 +180,12 @@ def sanitize(text):
     return arr2
 
 if __name__ == "__main__":
-    # This is the Python main function.
-    # You should be able to run
-    # python parse-text.py <filename>
-    # and this "main" function will open the file,
-    # read it line by line, extract the proper value from the JSON,
-    # pass to "sanitize" and print the result as a list.
 
-    # check the number of arguments
     if len(sys.argv) != 2:
         sys.stderr.write("wrong number of operands\n")
         sys.exit(1)
 
-    # open the test file for processing
+    # open file for processing
     with open(sys.argv[1], 'r') as f:
         for line in f:
             lineStr = json.loads(line)
