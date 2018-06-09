@@ -23,25 +23,21 @@ _EXTERNAL_PUNCTUATION = {
     ","
 }
 
-# replace the new lines and tabs with spaces
+# replace \n and \t with spaces
 def replace_with_space(text):
-
-    # use regular expressions to replace all the newlines and tabs with spaces
+    # use regular expressions to replace all the \n and \t with spaces
     returnStr = re.sub("[\n\t]", " ", text)
     return returnStr
 
-# replace all uppercase letters with lowercase letters
+# uppercase to lowercase
 def replace_with_lowercase(text):
-
     return text.lower()
 
-# remove all valid urls in the text
-
+# remove urls
 def remove_url(text):
-
     # first replace the [websiteName](urlName) with websiteName
     returnStr = re.sub(r'\[(.*)\]\((?:(?:https?|file|ftp)://)?\S+(?:\.com|\.edu|\.gov|\.org|\.net|\.us)\\*\S*\)', r'\1', text)
-    # then go back and remove all remaining urls not in [websiteName](urlName) format
+    # remove urls not in [websiteName](urlName) format
     returnStr = re.sub(r'(?:(?:https?|file|ftp)://)?\S+(?:\.com|\.edu|\.gov|\.org|\.net|\.us)\\*\S*', "", returnStr)
     return returnStr
 
