@@ -90,7 +90,7 @@ def create_bigrams(list):
 
 # create the trigrams
 def create_trigrams(list):
-    # concatenate all the strings
+    # concatenate the strings
     returnStr = ""
     totalLength = len(list)
     for i in range(len(list)):
@@ -101,8 +101,7 @@ def create_trigrams(list):
                 returnStr = returnStr + list[i] + "_" + list[i+1] + "_" + list[i+2]
     return returnStr
 
-def test_remove(text):
-
+def remove_characters(text):
     # remove all the special characters and unacceptable punctuation
     newStr = re.sub(r" [^a-zA-Z1234567890\.,:;\?!]", " ", text)
     newStr = re.sub(r"[^a-zA-Z1234567890\.,:;\?!] ", " ", newStr)
@@ -112,12 +111,10 @@ def test_remove(text):
 
     return newStr
 
-def test_external(text):
-
-    # remove the wild shit
+def remove_external_puntuation(text):
     newStr = re.sub(r"[^a-zA-Z0123456789 `~!@\#\$%\^&\*\(\)_\-\+=,\.<>\?/\\\{\}\[\]:;\|\'\"]", "", text)
 
-    # edge cases of beginning or end of string
+    # edge cases
     newStr = re.sub(r'(\w)(\W)$', r'\1 \2', newStr)
     newStr = re.sub(r'^(\W)(\w)', r'\1 \2', newStr)
     newStr = re.sub(r'^(\W)$', r'\1 ', newStr)
@@ -130,8 +127,7 @@ def test_external(text):
     # add space when external character at beginning of word
     newStr = re.sub(r' (\W)(\w)', r' \1 \2', newStr)
 
-
-    # use regex to remove the multiple spaces
+    # use regular expressions to remove the multiple spaces
     newStr = re.sub(" +", " ", newStr)
 
     # multiple punctuation
@@ -147,23 +143,22 @@ def test_external(text):
 
     return newStr
 
-def sanitize(text):
+def clean_up(text):
 
     returnStr = replace_with_space(text)
     returnStr = remove_url(returnStr)
     returnStr = replace_with_lowercase(returnStr)
-    returnStr = test_external(returnStr)
-    returnStr = test_remove(returnStr)
+    returnStr = remove_external_puntuation(returnStr)
+    returnStr = remove_characters(returnStr)
     returnStr = split_on_space(returnStr)
     parsed_text = create_parsed_text(returnStr)
     unigrams = create_unigrams(returnStr)
     bigrams = create_bigrams(returnStr)
     trigrams = create_trigrams(returnStr)
 
-    #return [parsed_text, unigrams, bigrams, trigrams]
-    arr1 = unigrams + " " + bigrams + " " + trigrams
-    arr2 = arr1.split()
-    return arr2
+    arr = unigrams + " " + bigrams + " " + trigrams
+    arr_split = arr.split()
+    return arr_split
 
 if __name__ == "__main__":
 
@@ -175,5 +170,5 @@ if __name__ == "__main__":
     with open(sys.argv[1], 'r') as f:
         for line in f:
             lineStr = json.loads(line)
-            parsedStr = sanitize(lineStr['body'])
+            parsedStr = clean_up(lineStr['body'])
             print (str(parsedStr))
