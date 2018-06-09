@@ -81,10 +81,8 @@ def create_bigrams(list):
     returnStr = ""
     totalLength = len(list)
     for i in range(len(list)):
-        # only go through the second to last word
         if i < (totalLength - 1):
             if list[i] not in _EXTERNAL_PUNCTUATION and list[i+1] not in _EXTERNAL_PUNCTUATION:
-                # only add space if not first bigram in string
                 if returnStr != "":
                     returnStr = returnStr + " "
                 returnStr = returnStr + list[i] + "_" + list[i+1]
@@ -96,10 +94,8 @@ def create_trigrams(list):
     returnStr = ""
     totalLength = len(list)
     for i in range(len(list)):
-        # only go through the third to last word
         if i < (totalLength - 2):
             if list[i] not in _EXTERNAL_PUNCTUATION and list[i+1] not in _EXTERNAL_PUNCTUATION and list[i+2] not in _EXTERNAL_PUNCTUATION:
-                # only add space if not first trigram in string
                 if returnStr != "":
                     returnStr = returnStr + " "
                 returnStr = returnStr + list[i] + "_" + list[i+1] + "_" + list[i+2]
