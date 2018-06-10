@@ -21,17 +21,7 @@ def main(context):
     comments.registerTempTable("commentsTable")
     submissions = sqlContext.read.json("submissions.json.bz2")
     submissions.registerTempTable("submissionsTable")
-
-    # Write the Parquets
-    #comments.write.parquet("comments.parquet")
-    #submissions.write.parquet("submissions.parquet")
-
-    # Read the parquets
-    #comments = sqlContext.read.parquet("comments.parquet")
-    #comments.registerTempTable("commentsTable")
-    #submissions = sqlContext.read.parquet("submissions.parquet")
-    #submissions.registerTempTable("submissionsTable")
-
+    
     # Read the CSV
     labels = sqlContext.read.format('csv').options(header='true', inferSchema='true').load("labeled_data.csv")
     labels.registerTempTable("labelsTable")
