@@ -82,10 +82,10 @@ def create_bigrams(list):
     totalLength = len(list)
     for i in range(len(list)):
         if i < (totalLength - 1):
-            if list[i] not in _EXTERNAL_PUNCTUATION and list[i+1] not in _EXTERNAL_PUNCTUATION:
+            if list[i] not in _EXTERNAL_PUNCTUATION and list[i + 1] not in _EXTERNAL_PUNCTUATION:
                 if returnStr != "":
                     returnStr = returnStr + " "
-                returnStr = returnStr + list[i] + "_" + list[i+1]
+                returnStr = returnStr + list[i] + "_" + list[i + 1]
     return returnStr
 
 # create the trigrams
@@ -95,10 +95,10 @@ def create_trigrams(list):
     totalLength = len(list)
     for i in range(len(list)):
         if i < (totalLength - 2):
-            if list[i] not in _EXTERNAL_PUNCTUATION and list[i+1] not in _EXTERNAL_PUNCTUATION and list[i+2] not in _EXTERNAL_PUNCTUATION:
+            if list[i] not in _EXTERNAL_PUNCTUATION and list[i + 1] not in _EXTERNAL_PUNCTUATION and list[i + 2] not in _EXTERNAL_PUNCTUATION:
                 if returnStr != "":
                     returnStr = returnStr + " "
-                returnStr = returnStr + list[i] + "_" + list[i+1] + "_" + list[i+2]
+                returnStr = returnStr + list[i] + "_" + list[i + 1] + "_" + list[i + 2]
     return returnStr
 
 def remove_characters(text):
