@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-"""Clean comment text for easier parsing."""
 
 from __future__ import print_function
 
