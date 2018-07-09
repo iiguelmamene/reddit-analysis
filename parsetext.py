@@ -11,6 +11,7 @@ import sys
 __author__ = ""
 __email__ = ""
 
+
 _EXTERNAL_PUNCTUATION = {
     ".",
     "!",
