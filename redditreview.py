@@ -74,6 +74,7 @@ def main(context):
         # Split the data 50/50
         posTrain, posTest = pos.randomSplit([0.5, 0.5])
         negTrain, negTest = neg.randomSplit([0.5, 0.5])
+        
         # Train the models
         print("Training positive classifier...")
         posModel = posCrossval.fit(posTrain)
