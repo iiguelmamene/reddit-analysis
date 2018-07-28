@@ -53,6 +53,7 @@ def main(context):
         # Initialize two logistic regression models.
         poslr = LogisticRegression(labelCol="label", featuresCol="features", maxIter=10).setThreshold(0.2)
         neglr = LogisticRegression(labelCol="label", featuresCol="features", maxIter=10).setThreshold(0.25)
+        
         # Binary classifier
         posEvaluator = BinaryClassificationEvaluator()
         negEvaluator = BinaryClassificationEvaluator()
