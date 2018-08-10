@@ -152,5 +152,4 @@ if __name__ == "__main__":
     sqlContext = SQLContext(sc)
     sc.addPyFile("parsetext.py")
     import parsetext
-    
     main(sqlContext)
