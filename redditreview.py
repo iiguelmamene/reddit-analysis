@@ -6,7 +6,6 @@ from pyspark.sql.functions import *
 from pyspark.sql.types import *
 from pyspark.ml.feature import CountVectorizer
 from pyspark.ml.feature import CountVectorizerModel
-
 from pyspark.ml.classification import LogisticRegression
 from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
 from pyspark.ml.tuning import CrossValidatorModel
