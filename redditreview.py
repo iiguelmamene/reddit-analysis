@@ -12,7 +12,6 @@ from pyspark.ml.tuning import CrossValidatorModel
 from pyspark.ml.evaluation import BinaryClassificationEvaluator
 import os
 
-
 def main(context):
 
     # Read from JSON
